@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { withRouter } from "react-router-dom";
 import { useMutation } from "react-apollo-hooks";
 import { SIGNUP_USER } from "../../queries";
 
@@ -11,7 +12,7 @@ const INITIAL_STATE = {
   passwordConfirmation: ""
 };
 
-export default function SignUp() {
+function SignUp({ history, refetch }) {
   const [user, setNewUser] = useState(INITIAL_STATE);
 
   const [addUser, { error, loading, data }] = useMutation(SIGNUP_USER);
@@ -39,9 +40,11 @@ export default function SignUp() {
       variables: {
         ...user
       }
-    }).then(data => {
-      console.log("data", data);
+    }).then(async data => {
+      localStorage.setItem("token", data.data.signUpUser.token);
+      await refetch();
       clearState();
+      history.push("/");
     });
   }
 
@@ -89,3 +92,5 @@ export default function SignUp() {
     </div>
   );
 }
+
+export default withRouter(SignUp);

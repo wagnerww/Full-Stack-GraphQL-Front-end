@@ -1,19 +1,41 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
+import NavBar from "./components/NavBar";
+
 import Home from "./pages/Home";
+import Search from "./pages/Recipe/Search";
+import AddRecipe from "./pages/Recipe/AddRecipe";
+import RecipePage from "./pages/Recipe/RecipePage";
+
+import Profile from "./pages/Profile";
+
 import SingIn from "./pages/Auth/SignIn";
 import SingUp from "./pages/Auth/SignUp";
 
-const Routes = () => (
+import withSession from "./services/withSession";
+
+const Routes = ({ refetch, session }) => (
   <BrowserRouter>
-    <Switch>
-      <Route exact={true} path="/" component={Home} />
-      <Route path="/signin" component={SingIn} />
-      <Route path="/signup" component={SingUp} />
-      <Redirect to="/" />
-    </Switch>
+    <Fragment>
+      <NavBar session={session} />
+      <Switch>
+        <Route exact={true} path="/" component={Home} />
+        <Route path="/search" component={Search} />
+        <Route
+          path="/recipe/add"
+          render={() => <AddRecipe session={session} />}
+        />
+        <Route path="/recipes/:_id" component={RecipePage} />
+        <Route path="/profile" component={Profile} />
+        <Route path="/signin" render={() => <SingIn refetch={refetch} />} />
+        <Route path="/signup" render={() => <SingUp refetch={refetch} />} />
+        <Redirect to="/" />
+      </Switch>
+    </Fragment>
   </BrowserRouter>
 );
 
-export default Routes;
+const RoutesWithSession = withSession(Routes);
+
+export default RoutesWithSession;

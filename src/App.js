@@ -6,7 +6,6 @@ import Routes from "./routes";
 
 import client from "./services/apollo";
 import { ApolloProvider } from "react-apollo-hooks";
-import Recipes from "./components/Recipes";
 
 function App() {
   return (
