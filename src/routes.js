@@ -27,7 +27,7 @@ const Routes = ({ refetch, session }) => (
           render={() => <AddRecipe session={session} />}
         />
         <Route path="/recipes/:_id" component={RecipePage} />
-        <Route path="/profile" component={Profile} />
+        <Route path="/profile" render={() => <Profile session={session} />} />
         <Route path="/signin" render={() => <SingIn refetch={refetch} />} />
         <Route path="/signup" render={() => <SingUp refetch={refetch} />} />
         <Redirect to="/" />

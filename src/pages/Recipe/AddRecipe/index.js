@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useMutation } from "react-apollo-hooks";
-import { ADD_RECIPE } from "../../../queries";
+import { ADD_RECIPE, GET_ALL_RECIPES } from "../../../queries";
+import { withRouter } from "react-router-dom";
 
 import Error from "../../../components/Error";
 
@@ -12,7 +13,7 @@ const INITIAL_STATE = {
   username: ""
 };
 
-export default function AddRecipe({ session }) {
+function AddRecipe({ session, history }) {
   const [recipe, setNewRecipe] = useState({
     ...INITIAL_STATE,
     username: session.getCurrentUser.username
@@ -20,10 +21,25 @@ export default function AddRecipe({ session }) {
 
   const [addRecipe, { error, loading, data }] = useMutation(ADD_RECIPE);
 
+  function cleanState() {
+    //setNewRecipe(INITIAL_STATE);
+  }
+
   function validateForm() {
     const { name, category, description, intructions } = recipe;
     const isInvalid = !name || !category || !description || !intructions;
     return isInvalid;
+  }
+
+  function updateCache(cache, { data: { addRecipe } }) {
+    /*  const { getAllRecipes } = cache.readQuery({ query: GET_ALL_RECIPES });
+
+    cache.writeQuery({
+      query: GET_ALL_RECIPES,
+      data: {
+        getAllRecipes: [addRecipe, ...getAllRecipes]
+      }
+    });*/
   }
 
   function handleChange(e) {
@@ -33,14 +49,14 @@ export default function AddRecipe({ session }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    addRecipe({
+    await addRecipe({
       variables: {
         ...recipe
-      }
+      },
+      update: updateCache
     });
-    console.log("rec", session.getCurrentUser.username);
-
-    console.log("recipe", recipe);
+    cleanState();
+    history.push("/");
   }
 
   return (
@@ -85,3 +101,5 @@ export default function AddRecipe({ session }) {
     </div>
   );
 }
+
+export default withRouter(AddRecipe);

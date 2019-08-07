@@ -1,5 +1,11 @@
 import React from "react";
 
-export default function Profile() {
-  return <h1>Profile</h1>;
+import UserInfo from "../UserInfo";
+
+export default function Profile({ session }) {
+  return (
+    <div className="App">
+      <UserInfo session={session} />
+    </div>
+  );
 }

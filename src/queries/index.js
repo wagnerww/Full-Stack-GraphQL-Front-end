@@ -22,6 +22,7 @@ export const ADD_RECIPE = gql`
       intructions
       createdDate
       likes
+      username
     }
   }
 `;
@@ -32,6 +33,10 @@ export const GET_CURRENT_USER = gql`
       username
       joinDate
       email
+      favorites {
+        _id
+        name
+      }
     }
   }
 `;
@@ -46,6 +51,16 @@ export const GET_ALL_RECIPES = gql`
   }
 `;
 
+export const SEARCH_RECIPES = gql`
+  query($searchTerm: String) {
+    searchRecipes(searchTerm: $searchTerm) {
+      _id
+      name
+      likes
+    }
+  }
+`;
+
 export const GET_RECIPE = gql`
   query($_id: ID!) {
     getRecipe(_id: $_id) {
@@ -56,6 +71,7 @@ export const GET_RECIPE = gql`
       intructions
       createdDate
       likes
+      username
     }
   }
 `;
