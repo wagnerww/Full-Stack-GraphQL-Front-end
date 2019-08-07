@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { useMutation } from "react-apollo-hooks";
-import { ADD_RECIPE, GET_ALL_RECIPES } from "../../../queries";
+import {
+  ADD_RECIPE,
+  GET_ALL_RECIPES,
+  GET_USER_RECIPES
+} from "../../../queries";
 import { withRouter } from "react-router-dom";
 
 import Error from "../../../components/Error";
@@ -19,7 +23,15 @@ function AddRecipe({ session, history }) {
     username: session.getCurrentUser.username
   });
 
-  const [addRecipe, { error, loading, data }] = useMutation(ADD_RECIPE);
+  const [addRecipe, { error, loading, data }] = useMutation(ADD_RECIPE, {
+    refetchQueries: [
+      { query: GET_ALL_RECIPES },
+      {
+        query: GET_USER_RECIPES,
+        variables: { username: session.getCurrentUser.username }
+      }
+    ]
+  });
 
   function cleanState() {
     //setNewRecipe(INITIAL_STATE);

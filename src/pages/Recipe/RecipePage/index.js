@@ -4,6 +4,8 @@ import { withRouter } from "react-router-dom";
 import { useQuery } from "react-apollo-hooks";
 import { GET_RECIPE } from "../../../queries";
 
+import LikeRecipe from "../../../components/LikeRecipe";
+
 function RecipePage({ match }) {
   const { _id } = match.params;
   const { data, error, loading } = useQuery(GET_RECIPE, {
@@ -22,7 +24,7 @@ function RecipePage({ match }) {
           <p>Instruction: {data.getRecipe.intructions}</p>
           <p>Likes: {data.getRecipe.likes}</p>
           <p>Created by: {data.getRecipe.username}</p>
-          <button>Like</button>
+          <LikeRecipe _id={_id} />
         </Fragment>
       )}{" "}
     </div>

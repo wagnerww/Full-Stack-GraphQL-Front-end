@@ -7,7 +7,7 @@ function Profile({ session }) {
   return (
     <div className="App">
       <UserInfo session={session} />
-      {/*  <UserRecipes />}*/}
+      <UserRecipes session={session} />
     </div>
   );
 }
